@@ -1,0 +1,65 @@
+<html>
+  <head>
+      <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Welcome to mcljs</title>
+
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+      <!-- Optional theme -->
+      <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    {% style "/css/screen.css" %}
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Welcome to mcljs</h1>
+        <p>Time to start building your site!</p>
+      </div>
+      <div class="row-fluid">
+        {% if dev %}
+        <p>This is the development version</p>
+        {% else %}
+        <p>This is the production version</p>
+        {% endif %}
+      </div>
+
+      <div class="row-fluid">
+        <div id="app">
+          <p>If you're seeing this message, that means you haven't
+            yet compiled your ClojureScript!</p>
+          <p>Please run <code>lein cljsbuild auto dev</code> to
+            start the ClojureScript compiler and reload the page.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest compiled and minified JQuery JavaScript -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <!-- Latest compiled and minified Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        var context = "{{servlet-context}}";
+    </script>
+    {% if dev %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.11.2/react.js"></script>
+    {% script "/js/out/goog/base.js" %}
+    {% script "/js/app.js" %}
+    {% else %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.11.2/react.min.js"></script>
+    {% script "/js/app.js" %}
+    {% endif %}
+    <script type="text/javascript">mcljs.core.run();</script>
+    {% if brepl %}
+    <script type="text/javascript">{{brepl|safe}}</script>
+    {% endif %}
+  </body>
+</html>
+
+
+
+
