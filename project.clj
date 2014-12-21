@@ -1,8 +1,9 @@
 ;;      Filename: project.clj
 ;; Creation Date: Thursday, 13 November 2014 03:18 PM AEDT
-;; Last Modified: Sunday, 21 December 2014 06:30 PM AEDT>
+;; Last Modified: Monday, 22 December 2014 09:40 AM AEDT>
 ;;   Description:
 ;;
+
 (defproject mcljs "0.1.0-SNAPSHOT"
   :description "A basic project skeleton using reagent, austin and selmar"
   :url "http://example.com/FIXME"

@@ -1,8 +1,10 @@
-;      Filename: routes.clj
-; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
-; Last Modified: Monday, 01 December 2014 07:00 PM AEDT>
-;   Description:
-;
+;;      Filename: routes.clj
+;; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:39 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.routes
   (:require [compojure.core :refer :all]
             [compojure.route :as route]

@@ -1,8 +1,10 @@
-;      Filename: common.cljs
-; Creation Date: Monday, 01 December 2014 06:17 PM AEDT
-; Last Modified: Sunday, 21 December 2014 04:57 PM AEDT>
-;   Description:
-;
+;;      Filename: common.cljs
+;; Creation Date: Monday, 01 December 2014 06:17 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:31 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.views.common
   (:require  [reagent.session :as session :refer [get]]))
 
@@ -14,7 +16,7 @@
    [:p (str "This is the " (get :env) " environment")]])
 
 (defn nav-bar []
-  [:ul {:class "nav navbar-nav"}
+  [:ul.nav.navbar-nav
    [:li {:class (active? (get :nav) "home")}
     [:a {:href "#/"} "Home"]]
    [:li {:class (active? (get :nav) "about")}

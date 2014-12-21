@@ -1,8 +1,9 @@
-;      Filename: routes.cljs
-; Creation Date: Monday, 01 December 2014 06:11 PM AEDT
-; Last Modified: Sunday, 21 December 2014 04:54 PM AEDT>
-;   Description:
-;
+;;      Filename: routes.cljs
+;; Creation Date: Monday, 01 December 2014 06:11 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:35 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
 
 (ns mcljs.routes
   (:require [secretary.core :as secretary :refer-macros [defroute]]

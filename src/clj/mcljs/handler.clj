@@ -1,8 +1,10 @@
-;      Filename: handler.clj
-; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
-; Last Modified: Saturday, 15 November 2014 09:19 AM AEDT>
-;   Description:
-;
+;;      Filename: handler.clj
+;; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:37 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.handler
   (:require [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.middleware.reload :refer [wrap-reload]]

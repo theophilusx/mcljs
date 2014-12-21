@@ -1,8 +1,10 @@
-;      Filename: login_page.cljs
-; Creation Date: Friday, 05 December 2014 05:58 PM AEDT
-; Last Modified: Sunday, 21 December 2014 06:25 PM AEDT>
-;   Description:
-;
+;;      Filename: login_page.cljs
+;; Creation Date: Friday, 05 December 2014 05:58 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:29 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.views.login-page
   (:require [json-html.core :refer [edn->hiccup]]
             [reagent.core :as reagent :refer [atom]]

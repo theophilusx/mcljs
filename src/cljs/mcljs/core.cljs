@@ -1,8 +1,9 @@
-;      Filename: core.cljs
-; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
-; Last Modified: Sunday, 21 December 2014 05:47 PM AEDT>
-;   Description:
-;
+;;      Filename: core.cljs
+;; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
+;; Last Modified: Monday, 22 December 2014 09:34 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
 
 (ns mcljs.core
   (:require [reagent.core :as reagent]

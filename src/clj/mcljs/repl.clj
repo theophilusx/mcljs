@@ -1,8 +1,10 @@
-;      Filename: repl.clj
-; Creation Date: Saturday, 15 November 2014 06:05 PM AEDT
-; Last Modified: Sunday, 16 November 2014 10:08 AM AEDT>
-;   Description:
-;
+;;      Filename: repl.clj
+;; Creation Date: Saturday, 15 November 2014 06:05 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:38 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.repl
   (:require [cemerick.austin.repls]
             [mcljs.handler :as handlers]

@@ -1,8 +1,10 @@
-;      Filename: layout.clj
-; Creation Date: Thursday, 13 November 2014 03:45 PM AEDT
-; Last Modified: Thursday, 13 November 2014 07:02 PM AEDT>
-;   Description:
-;
+;;      Filename: layout.clj
+;; Creation Date: Thursday, 13 November 2014 03:45 PM AEDT
+;; Last Modified: Monday, 22 December 2014 09:38 AM AEDT
+;;        Author: Tim Cross <theophilusx AT gmail.com>
+;;   Description:
+;;
+
 (ns mcljs.layout
   (:require [selmer.parser :as parser]
             [clojure.string :as s]
