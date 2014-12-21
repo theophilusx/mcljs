@@ -1,6 +1,6 @@
 ;      Filename: routes.clj
 ; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
-; Last Modified: Sunday, 16 November 2014 09:52 AM AEDT>
+; Last Modified: Monday, 01 December 2014 07:00 PM AEDT>
 ;   Description:
 ;
 (ns mcljs.routes
@@ -17,8 +17,7 @@
                                       nil)}))
 
 (defroutes app-routes
-  (GET "/" [] "Hello to Clojure World")
-  (GET "/index" [] (index-page))
+  (GET "/" [] (index-page))
   (ANY "/request" [] handle-dump)
   (route/resources "/")
   (route/not-found "Not Found"))

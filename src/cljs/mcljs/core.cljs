@@ -1,19 +1,34 @@
 ;      Filename: core.cljs
 ; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
-; Last Modified: Saturday, 15 November 2014 04:04 PM AEDT>
+; Last Modified: Sunday, 21 December 2014 05:47 PM AEDT>
 ;   Description:
 ;
 
 (ns mcljs.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent]
+            [reagent.session :as session :refer [get]]
+;;            [mcljs.session :as session :refer [global-state]]
+            [mcljs.routes :as routes]
+            [mcljs.views.common :as common]))
 
-(defn simple-component []
-  [:div
-   [:p "I am a component!"]
-   [:p "I have " [:strong "bold"]
-    [:span {:style {:color "red"}} " and red "] "text."]
-   [:p "Hello from clojureScript!"]])
+(defn dump-state []
+  (str "Errors: " (get :errors "No Errors") "\n"
+       "People: " (get :people "No records")))
 
-(defn ^:export run []
-  (reagent/render-component [simple-component]
-                            (.getElementById js/document "app")))
+(defn page-render []
+  [:div.container
+   [common/header]
+   [(get :current-page)]
+   [:h3 "State"]
+   [:label (dump-state)]])
+
+(defn page-component []
+  (reagent/create-class {:component-will-mount routes/app-routes
+                         :render page-render}))
+
+;; initialize app
+(reagent/render-component [common/nav-bar]
+                          (.getElementById js/document "navbar"))
+
+(reagent/render-component [page-component]
+                          (.getElementById js/document "app"))

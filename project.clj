@@ -1,6 +1,6 @@
 ;;      Filename: project.clj
 ;; Creation Date: Thursday, 13 November 2014 03:18 PM AEDT
-;; Last Modified: Sunday, 16 November 2014 12:33 PM AEDT>
+;; Last Modified: Sunday, 21 December 2014 06:30 PM AEDT>
 ;;   Description:
 ;;
 (defproject mcljs "0.1.0-SNAPSHOT"
@@ -12,14 +12,18 @@
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2371"]
-                 [ring "1.3.1"]
-                 [ring/ring-defaults "0.1.2"]
-                 [compojure "1.2.1"]
+                 [org.clojure/clojurescript "0.0-2498"]
+                 [ring "1.3.2"]
+                 [ring/ring-defaults "0.1.3"]
+                 [compojure "1.3.1"]
                  [environ "1.0.0"]
-                 [selmer "0.7.2"]
-                 [prone "0.6.0"]
-                 [reagent "0.4.3"]]
+                 [selmer "0.7.7"]
+                 [prone "0.8.0"]
+                 [json-html "0.2.6"]
+                 [reagent "0.4.3"]
+                 [reagent-utils "0.1.1"]
+                 [reagent-forms "0.2.9"]
+                 [secretary "1.2.1"]]
 
   :plugins [[lein-ring "0.8.13"]
             [lein-environ "1.0.0"]
@@ -52,7 +56,7 @@
 
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring-mock "0.1.5"]
-                                  [ring/ring-devel "1.3.1"]]
+                                  [ring/ring-devel "1.3.2"]]
                    :env {:dev true}}
              :prod {:ring {:open-browser? false
                            :stacktrace? false
