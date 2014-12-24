@@ -1,6 +1,6 @@
 ;;      Filename: routes.cljs
 ;; Creation Date: Monday, 01 December 2014 06:11 PM AEDT
-;; Last Modified: Monday, 22 December 2014 09:35 AM AEDT
+;; Last Modified: Monday, 22 December 2014 10:47 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -37,4 +37,9 @@
   (defroute "/login" []
     (put! :current-page (pages :login-page))
     (put! :nav "login"))
+
+  (defroute "/shopping" []
+    (put! :current-page (pages :shopping-page))
+    (put! :nav "shopping"))
+
   (hook-browser-navigation!))

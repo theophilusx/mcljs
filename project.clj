@@ -1,6 +1,6 @@
 ;;      Filename: project.clj
 ;; Creation Date: Thursday, 13 November 2014 03:18 PM AEDT
-;; Last Modified: Monday, 22 December 2014 09:40 AM AEDT>
+;; Last Modified: Wednesday, 24 December 2014 10:15 AM AEDT>
 ;;   Description:
 ;;
 
@@ -13,7 +13,7 @@
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2498"]
+                 [org.clojure/clojurescript "0.0-2511"]
                  [ring "1.3.2"]
                  [ring/ring-defaults "0.1.3"]
                  [compojure "1.3.1"]

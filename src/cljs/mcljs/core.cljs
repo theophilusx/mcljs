@@ -1,27 +1,22 @@
 ;;      Filename: core.cljs
 ;; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
-;; Last Modified: Monday, 22 December 2014 09:34 AM AEDT
+;; Last Modified: Wednesday, 24 December 2014 05:43 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.core
   (:require [reagent.core :as reagent]
-            [reagent.session :as session :refer [get]]
-;;            [mcljs.session :as session :refer [global-state]]
+            [reagent.session :as session :refer [get state]]
             [mcljs.routes :as routes]
             [mcljs.views.common :as common]))
-
-(defn dump-state []
-  (str "Errors: " (get :errors "No Errors") "\n"
-       "People: " (get :people "No records")))
 
 (defn page-render []
   [:div.container
    [common/header]
    [(get :current-page)]
    [:h3 "State"]
-   [:label (dump-state)]])
+   (common/dump-state [:people :order :errors] @state)])
 
 (defn page-component []
   (reagent/create-class {:component-will-mount routes/app-routes
