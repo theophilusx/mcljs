@@ -1,6 +1,6 @@
 ;;      Filename: project.clj
 ;; Creation Date: Thursday, 13 November 2014 03:18 PM AEDT
-;; Last Modified: Wednesday, 24 December 2014 10:15 AM AEDT>
+;; Last Modified: Saturday, 10 January 2015 08:58 AM AEDT>
 ;;   Description:
 ;;
 
@@ -13,23 +13,23 @@
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2511"]
+                 [org.clojure/clojurescript "0.0-2665"]
                  [ring "1.3.2"]
                  [ring/ring-defaults "0.1.3"]
                  [compojure "1.3.1"]
                  [environ "1.0.0"]
-                 [selmer "0.7.7"]
+                 [selmer "0.7.9"]
                  [prone "0.8.0"]
-                 [json-html "0.2.6"]
+                 [json-html "0.2.7"]
                  [reagent "0.4.3"]
-                 [reagent-utils "0.1.1"]
-                 [reagent-forms "0.2.9"]
+                 [reagent-utils "0.1.2"]
+                 [reagent-forms "0.3.9"]
                  [secretary "1.2.1"]]
 
-  :plugins [[lein-ring "0.8.13"]
+  :plugins [[lein-ring "0.9.0"]
             [lein-environ "1.0.0"]
             [com.cemerick/austin "0.1.4"]
-            [lein-cljsbuild "1.0.3"]]
+            [lein-cljsbuild "1.0.4"]]
 
   :ring {:handler mcljs.handler/app
          :init mcljs.handler/init

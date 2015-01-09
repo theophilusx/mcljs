@@ -1,6 +1,6 @@
 ;;      Filename: repl.clj
 ;; Creation Date: Saturday, 15 November 2014 06:05 PM AEDT
-;; Last Modified: Monday, 22 December 2014 09:38 AM AEDT
+;; Last Modified: Friday, 09 January 2015 06:07 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -21,7 +21,11 @@
   (let [port (if port (Integer/parseInt port) 3000)]
     (reset! server
             (jetty/run-jetty #'handlers/app {:port port
-                                             :join? false}))
+                                             :join? false
+                                             :ssl? true
+                                             :ssl-port 3080
+                                             :keystore "developer.jks"
+                                             :key-password "developer"}))
     (println (str "You can view the site at http://localhost:" port))))
 
 (defn stop-server []
