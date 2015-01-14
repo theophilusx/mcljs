@@ -1,6 +1,6 @@
 ;;      Filename: routes.clj
 ;; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
-;; Last Modified: Monday, 22 December 2014 09:39 AM AEDT
+;; Last Modified: Wednesday, 14 January 2015 04:36 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -11,6 +11,7 @@
             [ring.handler.dump :refer [handle-dump]]
             [environ.core :refer [env]]
             [mcljs.layout :as layout]
+            [mcljs.services :refer [shopping-calc]]
             [cemerick.austin.repls :refer (browser-connected-repl-js)]))
 
 (defn index-page []
@@ -21,5 +22,6 @@
 (defroutes app-routes
   (GET "/" [] (index-page))
   (ANY "/request" [] handle-dump)
+  (ANY "/shopping" request shopping-calc)
   (route/resources "/")
   (route/not-found "Not Found"))

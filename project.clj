@@ -1,6 +1,6 @@
 ;;      Filename: project.clj
 ;; Creation Date: Thursday, 13 November 2014 03:18 PM AEDT
-;; Last Modified: Saturday, 10 January 2015 08:58 AM AEDT>
+;; Last Modified: Wednesday, 14 January 2015 06:18 PM AEDT>
 ;;   Description:
 ;;
 
@@ -14,21 +14,26 @@
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2665"]
+                 [acyclic/squiggly-clojure "0.1.2-SNAPSHOT"]
                  [ring "1.3.2"]
                  [ring/ring-defaults "0.1.3"]
                  [compojure "1.3.1"]
                  [environ "1.0.0"]
                  [selmer "0.7.9"]
                  [prone "0.8.0"]
-                 [json-html "0.2.7"]
+                 [json-html "0.2.8"]
                  [reagent "0.4.3"]
                  [reagent-utils "0.1.2"]
                  [reagent-forms "0.3.9"]
-                 [secretary "1.2.1"]]
+                 [secretary "1.2.1"]
+                 [liberator "0.12.2"]
+                 [cheshire "5.4.0"]
+                 [com.cemerick/piggieback "0.1.4"]
+                 [clojurewerkz/money "1.6.0"]]
 
-  :plugins [[lein-ring "0.9.0"]
+  :plugins [[lein-ring "0.9.1"]
             [lein-environ "1.0.0"]
-            [com.cemerick/austin "0.1.4"]
+            [com.cemerick/austin "0.1.6"]
             [lein-cljsbuild "1.0.4"]]
 
   :ring {:handler mcljs.handler/app
@@ -58,7 +63,9 @@
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring-mock "0.1.5"]
                                   [ring/ring-devel "1.3.2"]]
-                   :env {:dev true}}
+                   :env {:dev true
+                         :squiggly {:checkers [:eastwood]
+                                    :eastwood-exclude-linters [:unlimited-use]}}}
              :prod {:ring {:open-browser? false
                            :stacktrace? false
                            :auto-reload? false}
