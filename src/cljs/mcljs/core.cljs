@@ -1,6 +1,6 @@
 ;;      Filename: core.cljs
 ;; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
-;; Last Modified: Wednesday, 24 December 2014 05:43 PM AEDT
+;; Last Modified: Friday, 16 January 2015 02:07 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -16,7 +16,7 @@
    [common/header]
    [(get :current-page)]
    [:h3 "State"]
-   (common/dump-state [:people :order :errors] @state)])
+   (common/dump-state [:people :errors] @state)])
 
 (defn page-component []
   (reagent/create-class {:component-will-mount routes/app-routes

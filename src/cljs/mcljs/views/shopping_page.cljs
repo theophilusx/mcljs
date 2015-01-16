@@ -1,6 +1,6 @@
 ;;      Filename: shopping_page.cljs
 ;; Creation Date: Monday, 22 December 2014 09:28 AM AEDT
-;; Last Modified: Wednesday, 24 December 2014 06:36 PM AEDT
+;; Last Modified: Friday, 16 January 2015 02:05 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -12,7 +12,8 @@
             [reagent-forms.core :refer [bind-fields]]
             [reagent.validation :as val]
             [reagent.format :as fmt]
-            [mcljs.views.common :refer [row input numeric-input dump-state]]))
+            [mcljs.views.common :refer [row input numeric-input dump-state]]
+            [ajax.core :refer [GET POST]]))
 
 (def shopping-template
   [:div
@@ -29,15 +30,36 @@
    (row "Discount ($)" [:input.form-control {:field :numeric
                                              :id :discount}])
    [:div.alert.alert-danger {:field :alert :id :error-discount}]
-   (row "Total $" [:input.form-control {:field :numeric
+   (row "Total $" [:input.form-control {:field :text
                                         :id :total
-                                        :disabled true}])])
+                                        :disabled true}])
+   [:div.alert.alert-success {:field :alert :id :order-status}]])
 
-(defn calc-total [quantity price tax discount]
-  (-> (* quantity price)
-      (* (+ 1 (/ tax 100)))
-      (- discount)
-      (.toFixed 2)))
+(defn handle-calc [order]
+  (fn [response]
+    (let [rsp (js->clj response :keywordize-keys true)
+          rkeys (keys rsp)]
+      (swap! order #(assoc % :total (:total rsp))))))
+
+(defn handle-order [order]
+  (fn [response]
+    (let [rsp (js->clj response :keywordize-keys true)]
+      (swap! order #(assoc % :order-status (:order-status rsp)
+                           :quantity 1
+                           :price 0.00
+                           :tax 0
+                           :discount 0
+                           :total "?")))))
+
+(defn handle-ajax-error [order]
+  (fn [err]
+    (let [rsp (:response err)]
+      (.log js/console (str "Error: " (:status err) " " (:status-text err)))
+      (.log js/console (str err))
+      (.log js/console (str "Response:"))
+      (.log js/console (str rsp))
+      (swap! order #(assoc % :error-total (str (:status err) " "
+                                               (:status-text err)))))))
 
 (defn valid-quantity? [order]
   (let [qty (:quantity @order)]
@@ -95,35 +117,48 @@
         discount-ok (valid-discount? order)]
     (if (and qty-ok price-ok tax-ok discount-ok) true false)))
 
-(defn save-order [order]
-  (put! :order {:quantity (:quantity @order)
-                :price (:price @order)
-                :tax (:tax @order)
-                :discount (:discount @order)
-                :total (:total @order)})
-  (clojure.core/reset! order {:quantity 1
-                              :price 0.00
-                              :tax 0
-                              :discount 0
-                              :total 0.00}))
+(defn post-calculate [order]
+  (POST "/calctotal" {:params {:quantity (:quantity @order)
+                               :price (:price @order)
+                               :tax (:tax @order)
+                               :discount (:discount @order)}
+                      :format :json
+                      :response-format :json
+                      :keywords? true
+                      :handler (handle-calc order)
+                      :error-handler (handle-ajax-error order)}))
+
+(defn post-order [order]
+  (POST "/placeorder" {:params {:quantity (:quantity @order)
+                                :price (:price @order)
+                                :tax (:tax @order)
+                                :discount (:discount @order)
+                                :total (:total @order)}
+                       :format :json
+                       :response-format :json
+                       :keywords? true
+                       :handler (handle-order order)
+                       :error-handler (handle-ajax-error order)}))
 
 (defn shopping-page []
   (let [order (atom {:quantity 1
                      :price 0.00
                      :tax 0
                      :discount 0
-                     :total 0.00})]
+                     :total "?"})]
     (fn []
       [:div
-       [bind-fields shopping-template order
-        (fn [[id] val {:keys [quantity price tax discount] :as doc}]
-          (when (and (some #{id} [:quantity :price :tax :discount])
-                     quantity price tax discount)
-            (assoc doc :total (calc-total quantity price tax discount))))]
+       [bind-fields shopping-template order]
        [:button.btn.btn-default {:type "submit"
                                  :on-click (fn []
                                              (if (valid-order? order)
-                                               (save-order order)))} "Submit"]
+                                               (post-calculate order)))}
+        "Calculate Total"]
+       [:button.btn.btn-default {:type "submit"
+                                 :on-click (fn []
+                                             (if (valid-order? order)
+                                               (post-order order)))}
+        "Place Order"]
        [:hr]
        [:h3 "Order"]
        [:div (dump-state [:quantity :price :tax :discount :total] @order)]])))

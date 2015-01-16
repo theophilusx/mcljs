@@ -1,6 +1,6 @@
 ;;      Filename: services.clj
 ;; Creation Date: Monday, 12 January 2015 03:46 PM AEDT
-;; Last Modified: Thursday, 15 January 2015 08:13 AM AEDT
+;; Last Modified: Friday, 16 January 2015 01:58 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -13,18 +13,9 @@
             [clojurewerkz.money.json]))
 
 (defn calc [params]
-  (let [q (bigdec (Integer/parseInt (:quantity  params)))
+  (let [q (bigdec (:quantity  params))
         p (ma/parse (str "AUD " (:price params)))
-        t (bigdec (Double/parseDouble (:tax params)))
-        d (ma/parse (str "AUD " (:discount params)))]
-    (-> (ma/multiply p q)
-        (ma/multiply (+ 1 (/ t 100)))
-        (ma/minus d))))
-
-(defn calc [params]
-  (let [q (bigdec (Integer/parseInt (:quantity  params)))
-        p (ma/parse (str "AUD " (:price params)))
-        t (bigdec (Double/parseDouble (:tax params)))
+        t (bigdec (:tax params))
         tax (with-precision 2 (+ 1 (/ t 100)))
         d (ma/parse (str "AUD " (:discount params)))]
     (-> (ma/multiply p q)
@@ -66,3 +57,9 @@
   :handle-created (fn [context]
                     (let [params (get-in context [:request :params])]
                       (generate-string (calculate-total params)))))
+
+(defresource place-order
+  :allowed-methods [:post]
+  :available-media-types ["application/json"]
+  :handle-created (fn [context]
+                    (generate-string {:order-status "Order has been placed"})))

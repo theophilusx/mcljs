@@ -1,6 +1,6 @@
 ;;      Filename: utils.clj
 ;; Creation Date: Thursday, 15 January 2015 07:14 AM AEDT
-;; Last Modified: Thursday, 15 January 2015 07:32 AM AEDT
+;; Last Modified: Friday, 16 January 2015 11:52 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -28,17 +28,13 @@
   (if (parse-double str) true false))
 
 (defn valid-quantity? [qty]
-  (and (not (empty? qty))
-       (valid-int? qty)))
+  (not (nil? qty)))
 
 (defn valid-price? [price]
-  (and (not (empty? price))
-       (valid-double? price)))
+  (not (nil? price)))
 
 (defn valid-tax? [tax]
-  (and (not (empty? tax))
-       (valid-int? tax)))
+  (not (nil? tax)))
 
 (defn valid-discount? [discount]
-  (and (not (empty? discount))
-       (valid-double? discount)))
+  (not (nil? discount)))

@@ -1,6 +1,6 @@
 ;;      Filename: handler.clj
 ;; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
-;; Last Modified: Tuesday, 13 January 2015 04:38 PM AEDT
+;; Last Modified: Friday, 16 January 2015 08:08 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -9,6 +9,7 @@
   (:require [ring.middleware.defaults :refer [wrap-defaults site-defaults
                                               api-defaults]]
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.json :refer [wrap-json-params]]
             [selmer.middleware :refer [wrap-error-page]]
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
@@ -20,8 +21,9 @@
     (-> #'app-routes
         (wrap-reload)
         (wrap-defaults api-defaults)
-;        (wrap-error-page)
- ;       (wrap-exceptions)
+        (wrap-json-params)
+                                        ;        (wrap-error-page)
+                                        ;       (wrap-exceptions)
         (wrap-trace :header :ui))
     (-> #'app-routes
         (wrap-defaults site-defaults)
