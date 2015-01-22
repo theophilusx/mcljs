@@ -1,6 +1,6 @@
 ;;      Filename: routes.clj
 ;; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
-;; Last Modified: Wednesday, 21 January 2015 04:14 PM AEDT
+;; Last Modified: Thursday, 22 January 2015 06:07 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -22,9 +22,9 @@
                                      :dev (env :dev)}))
 
 (defroutes api-routes
-  (ANY "/api/debug" request debug-request)
-  (ANY "/api/order/calc" request shopping-calc)
-  (ANY "/api/order/place" request place-order))
+  (ANY "/api/debug" [] debug-request)
+  (ANY "/api/order/calc" [] shopping-calc)
+  (ANY "/api/order/place" [] place-order))
 
 (defroutes app-routes
   (GET "/" [] (index-page))

@@ -1,6 +1,6 @@
 ;;      Filename: handler.clj
 ;; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
-;; Last Modified: Wednesday, 21 January 2015 05:22 PM AEDT
+;; Last Modified: Thursday, 22 January 2015 07:11 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -20,6 +20,7 @@
 (def app
   (if (env :dev)
     (routes (-> api-routes
+                (wrap-reload)
                 (wrap-routes wrap-json-params)
                 (wrap-routes wrap-defaults api-defaults)
                 (wrap-routes wrap-trace :header :ui))

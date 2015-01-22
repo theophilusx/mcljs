@@ -1,6 +1,6 @@
 ;;      Filename: shopping_page.cljs
 ;; Creation Date: Monday, 22 December 2014 09:28 AM AEDT
-;; Last Modified: Thursday, 22 January 2015 11:25 AM AEDT
+;; Last Modified: Friday, 23 January 2015 08:47 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -88,7 +88,10 @@
 (defn handle-order [order]
   (fn [response]
     (let [rsp (js->clj response :keywordize-keys true)]
-      (swap! order #(assoc-in % [:order :status] (:order-status rsp)))
+      (swap! order #(assoc-in % [:order :status] (str "Order successful: "
+                                                      "Order ID = "
+                                                      (:order-id rsp))))
+      (swap! order #(assoc-in % [:error :total] nil))
       (swap! order #(assoc % :quantity 1
                            :price 0.00
                            :tax 0
@@ -97,11 +100,11 @@
 
 (defn handle-ajax-error [order]
   (fn [err]
-    (let [rsp (:response err)]
+    (let [rsp (js->clj (:response err) :keywordize-keys true)]
       (.log js/console (str "Error: " (:status err) " " (:status-text err)))
       (.log js/console (str err))
       (swap! order #(assoc-in % [:error :total] (str (:status err) " "
-                                                     (:status-text err)))))))
+                                                     (:message rsp)))))))
 
 (defn post-calculate [order]
   (POST "/api/order/calc" {:params {:quantity (:quantity @order)

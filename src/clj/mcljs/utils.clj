@@ -1,10 +1,9 @@
 ;;      Filename: utils.clj
 ;; Creation Date: Thursday, 15 January 2015 07:14 AM AEDT
-;; Last Modified: Friday, 16 January 2015 11:52 AM AEDT
+;; Last Modified: Friday, 23 January 2015 08:42 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
-
 
 (ns mcljs.utils)
 
@@ -38,3 +37,8 @@
 
 (defn valid-discount? [discount]
   (not (nil? discount)))
+
+(defn valid-total? [total]
+  (if (re-matches #"^\$\d+\.\d\d" total)
+    true
+    false))
