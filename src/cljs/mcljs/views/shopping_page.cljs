@@ -1,6 +1,6 @@
 ;;      Filename: shopping_page.cljs
 ;; Creation Date: Monday, 22 December 2014 09:28 AM AEDT
-;; Last Modified: Wednesday, 21 January 2015 04:25 PM AEDT
+;; Last Modified: Thursday, 22 January 2015 11:25 AM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -14,6 +14,24 @@
             [reagent.format :as fmt]
             [mcljs.views.common :refer [row input numeric-input dump-state]]
             [ajax.core :refer [GET POST]]))
+
+(def error-msg {:quantity "Quantity must be > 0 and a whole number"
+                :price "Price must be > 0 in whole dollars or dollars and cents"
+                :tax "Tax must be a whole number between 0 and 100"
+                :discount (str "Discount must be less than total price i.e. "
+                               "price * quantity and in whole dollars or "
+                               "dollars plus cents")
+                :order (str "All fields must be completed with valid "
+                            "input before the total can be calculated")
+                :place-order (str "You must fill in all fields and calculate "
+                                  "the order total before you can place "
+                                  "an order")})
+
+(defn set-error [tag doc]
+  (assoc-in doc [:error tag] (tag error-msg)))
+
+(defn clear-error [tag doc]
+  (assoc-in doc [:error tag] nil))
 
 (def shopping-template
   [:div
@@ -34,64 +52,32 @@
                                         :id :total
                                         :disabled true}])
    [:div.alert.alert-danger {:field :alert :id :error.total}]
-   [:div.alert.alert-success {:field :alert :id :order-status}]])
+   [:div.alert.alert-success {:field :alert :id :order.status}]])
 
 
-(defn valid-quantity? [order]
-  (let [qty (:quantity @order)]
-    (if (not (and (> qty 0)
-                  (= (rem qty 1) 0)))
-      (do
-        (swap! order
-               #(assoc-in % [:error :quantity]
-                          "Quantity must be greater than 0 and a whole number!"))
-        false)
-      (do
-        (swap! order #(assoc-in % [:error :quantity] nil))
-        true))))
+(defn valid-quantity? [qty]
+  (and (> qty 0)
+       (= (rem qty 1) 0)))
 
-(defn valid-price? [order]
-  (let [price (:price @order)]
-    (if (not (> price 0))
-      (do
-        (swap! order #(assoc-in % [:error :price]
-                                "Price must be greater than 0!"))
-        false)
-      (do
-        (swap! order #(assoc-in % [:error :price] nil))
-        true))))
+(defn valid-price? [price]
+  (> price 0))
 
-(defn valid-tax? [order]
-  (let [tax (:tax @order)]
-    (if (not (and (>= tax 0)
-                  (<= tax 100)))
-      (do
-        (swap! order #(assoc-in % [:error :tax]
-                                "Tax must be between 0 and 100!"))
-        false)
-      (do
-        (swap! order #(assoc-in % [:error :tax] nil))
-        true))))
+(defn valid-tax? [tax]
+  (and (>= tax 0)
+       (<= tax 100)))
 
-(defn valid-discount? [order]
-  (let [discount (:discount @order)
-        price (:price @order)
-        quantity (:quantity @order)]
-    (if (not (< discount (* quantity price)))
-      (do
-        (swap! order #(assoc-in % [:error :discount]
-                                "Discount must be less than full price!"))
-        false)
-      (do
-        (swap! order #(assoc-in % [:error :discount] nil))
-        true))))
+(defn valid-discount? [discount price quantity]
+  (and (>= discount 0)
+       (< discount (* quantity price))))
 
-(defn valid-order? [order]
-  (let [qty-ok (valid-quantity? order)
-        price-ok (valid-price? order)
-        tax-ok (valid-tax? order)
-        discount-ok (valid-discount? order)]
-    (if (and qty-ok price-ok tax-ok discount-ok) true false)))
+(defn valid-order? [{:keys [quantity price tax discount] :as order}]
+  (and (valid-quantity? quantity)
+       (valid-price? price)
+       (valid-tax? tax)
+       (valid-discount? discount price quantity)))
+
+(defn valid-total? [{:keys [total]}]
+  (not (= "?" total)))
 
 (defn handle-calc [order]
   (fn [response]
@@ -102,8 +88,8 @@
 (defn handle-order [order]
   (fn [response]
     (let [rsp (js->clj response :keywordize-keys true)]
-      (swap! order #(assoc % :order-status (:order-status rsp)
-                           :quantity 1
+      (swap! order #(assoc-in % [:order :status] (:order-status rsp)))
+      (swap! order #(assoc % :quantity 1
                            :price 0.00
                            :tax 0
                            :discount 0
@@ -118,27 +104,27 @@
                                                      (:status-text err)))))))
 
 (defn post-calculate [order]
-  (POST "/calctotal" {:params {:quantity (:quantity @order)
+  (POST "/api/order/calc" {:params {:quantity (:quantity @order)
                                :price (:price @order)
                                :tax (:tax @order)
                                :discount (:discount @order)}
-                      :format :json
-                      :response-format :json
-                      :keywords? true
-                      :handler (handle-calc order)
-                      :error-handler (handle-ajax-error order)}))
+                           :format :json
+                           :response-format :json
+                           :keywords? true
+                           :handler (handle-calc order)
+                           :error-handler (handle-ajax-error order)}))
 
 (defn post-order [order]
-  (POST "/placeorder" {:params {:quantity (:quantity @order)
+  (POST "/api/order/place" {:params {:quantity (:quantity @order)
                                 :price (:price @order)
                                 :tax (:tax @order)
                                 :discount (:discount @order)
                                 :total (:total @order)}
-                       :format :json
-                       :response-format :json
-                       :keywords? true
-                       :handler (handle-order order)
-                       :error-handler (handle-ajax-error order)}))
+                            :format :json
+                            :response-format :json
+                            :keywords? true
+                            :handler (handle-order order)
+                            :error-handler (handle-ajax-error order)}))
 
 (defn shopping-page []
   (let [order (atom {:quantity 1
@@ -148,17 +134,49 @@
                      :total "?"})]
     (fn []
       [:div
-       [bind-fields shopping-template order]
+       [bind-fields shopping-template order
+        (fn [[id] val {:keys [quantity price tax discount] :as doc}]
+          (condp = id
+            :quantity (if (not (valid-quantity? val))
+                        (set-error :quantity doc)
+                        (clear-error :quantity doc))
+            :price (if (not (valid-price? val))
+                     (set-error :price doc)
+                     (clear-error :price doc))
+            :tax (if (not (valid-tax? val))
+                   (set-error :tax doc)
+                   (clear-error :tax doc))
+            :discount (if (not (valid-discount? discount price quantity))
+                        (set-error :discount doc)
+                        (clear-error :discount doc))
+            (assoc-in doc [:error :total] (str "Unexpected ID: " id))))
+        (fn [id val doc]
+          (if (get-in doc [:order :status])
+            (assoc-in doc [:order :status] nil)))]
        [:button.btn.btn-default {:type "submit"
-                                 :on-click (fn []
-                                             (if (valid-order? order)
-                                               (post-calculate order)))}
+                                 :on-click
+                                 (fn []
+                                   (if (valid-order? @order)
+                                     (do
+                                       (swap! order
+                                              #(assoc-in % [:error :total] nil))
+                                       (post-calculate order))
+                                     (swap! order
+                                            #(assoc-in
+                                              % [:error :total]
+                                              (:order error-msg)))))}
         "Calculate Total"]
        [:button.btn.btn-default {:type "submit"
-                                 :on-click (fn []
-                                             (if (valid-order? order)
-                                               (post-order order)))}
+                                 :on-click
+                                 (fn []
+                                   (if (and (valid-order? @order)
+                                            (valid-total? @order))
+                                     (post-order order)
+                                     (swap! order
+                                            #(assoc-in
+                                              % [:error :total]
+                                              (:place-order error-msg)))))}
         "Place Order"]
        [:hr]
        [:h3 "Order"]
-       [:div (dump-state [:quantity :price :tax :discount :total] @order)]])))
+       [:div (edn->hiccup @order)]])))

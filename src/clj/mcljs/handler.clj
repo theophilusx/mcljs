@@ -1,6 +1,6 @@
 ;;      Filename: handler.clj
 ;; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
-;; Last Modified: Wednesday, 21 January 2015 04:27 PM AEDT
+;; Last Modified: Wednesday, 21 January 2015 05:22 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -25,7 +25,7 @@
                 (wrap-routes wrap-trace :header :ui))
             (-> app-routes
                 (wrap-routes wrap-error-page)
-                (wrap-routes wrap-exception)))
+                (wrap-routes wrap-exceptions)))
     (routes (-> api-routes
                 (wrap-routes wrap-json-params)
                 (wrap-routes wrap-defaults api-defaults))
