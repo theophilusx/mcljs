@@ -37,15 +37,22 @@
     <div class="container theme-showcase" role="main">
       <div class="jumbotron">
         <h1>Hello, World!</h1>
-      </div>
-
-      <div id="app">
-        <p>If you're seeing this message, that means you haven't
-          yet compiled your ClojureScript!</p>
-        <p>Please run <code>lein cljsbuild auto dev</code> to
-          start the ClojureScript compiler and reload the page.</p>
+        {% if dev %}
+        <p>This is the DEV environment</p>
+        {% else %}
+        <p>This is the PROD environment</p>
+        {% endif %}
       </div>
     </div>
+    
+    <div id="app">
+      <p>If you're seeing this message, that means you haven't
+        yet compiled your ClojureScript!</p>
+      <p>Please run <code>lein cljsbuild auto dev</code> to
+        start the ClojureScript compiler and reload the page.</p>
+    </div>
+
+
     <!-- Latest compiled and minified JQuery JavaScript -->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!-- Latest compiled and minified Bootstrap JavaScript -->

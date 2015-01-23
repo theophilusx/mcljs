@@ -1,18 +1,18 @@
 ;;      Filename: shopping_page.cljs
 ;; Creation Date: Monday, 22 December 2014 09:28 AM AEDT
-;; Last Modified: Friday, 23 January 2015 08:47 AM AEDT
+;; Last Modified: Friday, 23 January 2015 02:36 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.views.shopping-page
-  (:require [json-html.core :refer [edn->hiccup]]
-            [reagent.core :refer [atom]]
+  (:require [reagent.core :refer [atom]]
             [reagent.session :refer [get put! assoc-in!]]
             [reagent-forms.core :refer [bind-fields]]
             [reagent.validation :as val]
             [reagent.format :as fmt]
-            [mcljs.views.common :refer [row input numeric-input dump-state]]
+            [mcljs.views.common :refer [row input numeric-input]]
+            [mcljs.state :refer [render-map]]
             [ajax.core :refer [GET POST]]))
 
 (def error-msg {:quantity "Quantity must be > 0 and a whole number"
@@ -35,7 +35,7 @@
 
 (def shopping-template
   [:div
-   [:legend "Shopping Calculator"]
+   [:h3 "Shopping Calculator"]
    (numeric-input "Quantity" :quantity)
    [:div.alert.alert-danger {:field :alert :id :error.quantity}]
    (numeric-input "Price $" :price)
@@ -136,50 +136,52 @@
                      :discount 0
                      :total "?"})]
     (fn []
-      [:div
-       [bind-fields shopping-template order
-        (fn [[id] val {:keys [quantity price tax discount] :as doc}]
-          (condp = id
-            :quantity (if (not (valid-quantity? val))
-                        (set-error :quantity doc)
-                        (clear-error :quantity doc))
-            :price (if (not (valid-price? val))
-                     (set-error :price doc)
-                     (clear-error :price doc))
-            :tax (if (not (valid-tax? val))
-                   (set-error :tax doc)
-                   (clear-error :tax doc))
-            :discount (if (not (valid-discount? discount price quantity))
-                        (set-error :discount doc)
-                        (clear-error :discount doc))
-            (assoc-in doc [:error :total] (str "Unexpected ID: " id))))
-        (fn [id val doc]
-          (if (get-in doc [:order :status])
-            (assoc-in doc [:order :status] nil)))]
-       [:button.btn.btn-default {:type "submit"
-                                 :on-click
-                                 (fn []
-                                   (if (valid-order? @order)
-                                     (do
+      [:div.container
+       [:div.row
+        [:div.col-md-6
+         [bind-fields shopping-template order
+          (fn [[id] val {:keys [quantity price tax discount] :as doc}]
+            (condp = id
+              :quantity (if (not (valid-quantity? val))
+                          (set-error :quantity doc)
+                          (clear-error :quantity doc))
+              :price (if (not (valid-price? val))
+                       (set-error :price doc)
+                       (clear-error :price doc))
+              :tax (if (not (valid-tax? val))
+                     (set-error :tax doc)
+                     (clear-error :tax doc))
+              :discount (if (not (valid-discount? discount price quantity))
+                          (set-error :discount doc)
+                          (clear-error :discount doc))
+              (assoc-in doc [:error :total] (str "Unexpected ID: " id))))
+          (fn [id val doc]
+            (if (get-in doc [:order :status])
+              (assoc-in doc [:order :status] nil)))]
+         [:button.btn.btn-default {:type "submit"
+                                   :on-click
+                                   (fn []
+                                     (if (valid-order? @order)
+                                       (do
+                                         (swap! order
+                                                #(assoc-in % [:error :total] nil))
+                                         (post-calculate order))
                                        (swap! order
-                                              #(assoc-in % [:error :total] nil))
-                                       (post-calculate order))
-                                     (swap! order
-                                            #(assoc-in
-                                              % [:error :total]
-                                              (:order error-msg)))))}
-        "Calculate Total"]
-       [:button.btn.btn-default {:type "submit"
-                                 :on-click
-                                 (fn []
-                                   (if (and (valid-order? @order)
-                                            (valid-total? @order))
-                                     (post-order order)
-                                     (swap! order
-                                            #(assoc-in
-                                              % [:error :total]
-                                              (:place-order error-msg)))))}
-        "Place Order"]
-       [:hr]
-       [:h3 "Order"]
-       [:div (edn->hiccup @order)]])))
+                                              #(assoc-in
+                                                % [:error :total]
+                                                (:order error-msg)))))}
+          "Calculate Total"]
+         [:button.btn.btn-default {:type "submit"
+                                   :on-click
+                                   (fn []
+                                     (if (and (valid-order? @order)
+                                              (valid-total? @order))
+                                       (post-order order)
+                                       (swap! order
+                                              #(assoc-in
+                                                % [:error :total]
+                                                (:place-order error-msg)))))}
+          "Place Order"]]
+        [:div.col-md-6
+         [:h3 "Order"]
+         [:div (render-map @order)]]]])))

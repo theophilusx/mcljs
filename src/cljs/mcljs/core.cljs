@@ -1,6 +1,6 @@
 ;;      Filename: core.cljs
 ;; Creation Date: Saturday, 15 November 2014 10:19 AM AEDT
-;; Last Modified: Friday, 16 January 2015 02:07 PM AEDT
+;; Last Modified: Friday, 23 January 2015 12:23 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -9,14 +9,18 @@
   (:require [reagent.core :as reagent]
             [reagent.session :as session :refer [get state]]
             [mcljs.routes :as routes]
-            [mcljs.views.common :as common]))
+            [mcljs.views.common :as common]
+            [mcljs.state :refer [render-state state-keys]]))
 
 (defn page-render []
-  [:div.container
-   [common/header]
+  [:div
    [(get :current-page)]
-   [:h3 "State"]
-   (common/dump-state [:people :errors] @state)])
+   [:div.container
+    [:div.row
+     [:div
+      [:h3 "State"]
+      (state-keys)
+      (render-state)]]]])
 
 (defn page-component []
   (reagent/create-class {:component-will-mount routes/app-routes
