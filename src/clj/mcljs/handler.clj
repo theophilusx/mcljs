@@ -1,22 +1,27 @@
 ;;      Filename: handler.clj
 ;; Creation Date: Thursday, 13 November 2014 03:15 PM AEDT
-;; Last Modified: Thursday, 22 January 2015 07:11 PM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:51 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.handler
-  (:require [ring.middleware.defaults :refer [wrap-defaults site-defaults
-                                              api-defaults]]
-            [ring.middleware.reload :refer [wrap-reload]]
-            [ring.middleware.json :refer [wrap-json-params]]
-            [compojure.core :refer :all]
-            [selmer.middleware :refer [wrap-error-page]]
-            [prone.middleware :refer [wrap-exceptions]]
+  (:require [compojure.core :refer :all]
             [environ.core :refer [env]]
-            [mcljs.routes :refer [app-routes api-routes]]
-            [liberator.dev :refer [wrap-trace]]))
+            [liberator.dev :refer [wrap-trace]]
+            [mcljs.routes :refer [api-routes app-routes]]
+            [prone.middleware :refer [wrap-exceptions]]
+            [ring.middleware.defaults :refer [api-defaults
+                                              wrap-defaults]]
+            [ring.middleware.json :refer [wrap-json-params]]
+            [ring.middleware.reload :refer [wrap-reload]]
+            [selmer.middleware :refer [wrap-error-page]]))
 
+;; Really need to fix this up so that the right middleware only gets
+;; applied to the routes which need it. Probably need to use a
+;; compojure context
+;; There is an issue with wrap-defaults which needs to be fixed before
+;; wrap-defaults can be used with wrap-routes
 (def app
   (if (env :dev)
     (routes (-> api-routes

@@ -1,13 +1,12 @@
 ;;      Filename: repl.clj
 ;; Creation Date: Saturday, 15 November 2014 06:05 PM AEDT
-;; Last Modified: Thursday, 15 January 2015 06:55 AM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:52 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.repl
-  (:require [cemerick.austin.repls]
-            [mcljs.handler :refer [app]]
+  (:require [mcljs.handler :refer [app]]
             [ring.adapter.jetty :as jetty]))
 
 (defonce server (atom nil))
@@ -28,7 +27,9 @@
                                     :key-password "developer"}))
     (println (str "You can view the site at http://localhost:" port))))
 
-(defn stop-server []
+(defn stop-server
+  "Stop the jetty server"
+  []
   (.stop @server)
   (reset! server nil))
 

@@ -1,6 +1,6 @@
 ;;      Filename: home_page.cljs
 ;; Creation Date: Monday, 01 December 2014 06:22 PM AEDT
-;; Last Modified: Saturday, 24 January 2015 04:05 PM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:32 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -45,7 +45,7 @@
                 "programming was back in the late 1990's with Java 1.0. "
                 "Back then, CSS was just beginning to gain traction, XHTML "
                 "was still being argued about and nobody had heard of AJAX! "
-                "Things have evolved a lot and I need to get back up to speed.")]
+                "Things have evolved a lot. I need to get back up to speed.")]
       [:li (str "Have somewhere to try out ideas, test new libraries and "
                 "try to learn by doing.")]
       [:li (str "Work out how to best configure my development environment. "

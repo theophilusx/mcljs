@@ -1,6 +1,6 @@
 (ns mcljs.core-test
   (:require [clojure.test :refer :all]
-            [mcljs.core :refer :all]))
+            [mcljs.handler :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

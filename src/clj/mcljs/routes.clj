@@ -1,21 +1,23 @@
 ;;      Filename: routes.clj
 ;; Creation Date: Thursday, 13 November 2014 06:50 PM AEDT
-;; Last Modified: Thursday, 22 January 2015 06:07 PM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:53 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.routes
-  (:require [compojure.core :refer :all]
+  (:require [cemerick.austin.repls :refer [browser-connected-repl-js]]
+            [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.handler.dump :refer [handle-dump]]
-            [selmer.parser :refer [render-file]]
             [environ.core :refer [env]]
-            [mcljs.services :refer [shopping-calc place-order]]
             [mcljs.debug :refer [debug-request]]
-            [cemerick.austin.repls :refer (browser-connected-repl-js)]))
+            [mcljs.services :refer [place-order shopping-calc]]
+            [ring.handler.dump :refer [handle-dump]]
+            [selmer.parser :refer [render-file]]))
 
-(defn index-page []
+(defn index-page
+  "Handler to generate the index.html page"
+  []
   (render-file "templates/app.html" {:brepl (if (env :dev)
                                               (browser-connected-repl-js)
                                               nil)

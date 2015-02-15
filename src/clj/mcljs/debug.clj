@@ -1,16 +1,18 @@
 ;;      Filename: debug.clj
 ;; Creation Date: Thursday, 15 January 2015 01:20 PM AEDT
-;; Last Modified: Friday, 16 January 2015 02:09 PM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:48 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
 
 (ns mcljs.debug
-  (:require [mcljs.utils :as u]
-            [liberator.core :refer [defresource resource request-method-in]]
-            [cheshire.core :refer [generate-string]]))
+  (:require [cheshire.core :refer [generate-string]]
+            [liberator.core :refer [defresource]]))
 
-(defn context-to-json [ctx]
+(defn context-to-json
+  "Dump out some parts of the liberator context into a json map which
+  can be returned to client for debugging purposes"
+  [ctx]
   (println (str "JSONP: " (get-in ctx [:request :json-params])))
   (println (str "PARAMS: " (get-in ctx [:request :params])))
   (generate-string {:status (:status ctx)

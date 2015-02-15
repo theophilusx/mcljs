@@ -1,6 +1,6 @@
 ;;      Filename: shopping_page.cljs
 ;; Creation Date: Monday, 22 December 2014 09:28 AM AEDT
-;; Last Modified: Friday, 23 January 2015 02:36 PM AEDT
+;; Last Modified: Sunday, 15 February 2015 02:30 PM AEDT
 ;;        Author: Tim Cross <theophilusx AT gmail.com>
 ;;   Description:
 ;;
@@ -164,7 +164,8 @@
                                      (if (valid-order? @order)
                                        (do
                                          (swap! order
-                                                #(assoc-in % [:error :total] nil))
+                                                #(assoc-in
+                                                  % [:error :total] nil))
                                          (post-calculate order))
                                        (swap! order
                                               #(assoc-in
